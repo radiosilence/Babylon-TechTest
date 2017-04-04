@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "import/no-extraneous-dependencies": [0, {
+      "devDependencies": false
+    }],
+    "no-console": 0
+  }
+}

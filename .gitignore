@@ -1,0 +1,12 @@
+/.idea
+/node_modules
+/dist
+xunit.xml
+*.tar*
+.DS_Store
+*.log
+*.codekit
+*.iml
+*.desc
+*.lock
+!yarn.lock
