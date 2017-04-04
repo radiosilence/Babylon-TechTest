@@ -1,13 +1,13 @@
 import I from 'immutable';
 import uuid from 'uuid';
-import Decimal from 'decimal.js';
 import { ActionTypes } from '../constants';
+import { applyDiscounts } from '../discounts';
 
 import { products } from '../data';
 
 function updateTotal(state) {
-  // const { cart } = state;
-  return state;
+  const { cart } = state;
+  return state.merge(applyDiscounts(cart));
 }
 
 function updateCart(state, fn) {
@@ -17,7 +17,7 @@ function updateCart(state, fn) {
 function createCartItem(id, quantity = 1) {
   return I.Map({
     cartId: uuid(),
-    total: new Decimal(0),
+    lineTotal: products.getIn([id, 'price']),
     id,
     quantity,
   });
@@ -25,11 +25,7 @@ function createCartItem(id, quantity = 1) {
 
 export const initialState = I.fromJS({
   // Create an ID indexed map from the list of products.
-  products: products
-    .reduce(
-    (dst, product) => dst.set(product.get('id'), product),
-    I.Map(),
-  ),
+  products,
   cart: [],
 });
 

@@ -43,6 +43,7 @@ describe('shop reducer', () => {
       cartId,
       quantity: 2,
     });
+    // console.log(state);
     item = state.getIn(['cart', 0]);
     const { quantity } = item;
     expect(quantity).to.equal(2);
