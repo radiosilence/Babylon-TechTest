@@ -33,12 +33,21 @@ function applyLineDiscounts(cart) {
 
 // TODO
 function applicableToCart(cart, discount) {
-  return true;
+  const inCartIds = cart.map(({ id }) => id);
+
+  const { itemsPresent } = discount;
+  return itemsPresent
+    .reduce(
+      (dst, productId) => dst && inCartIds.includes(productId),
+      true,
+    );
 }
 
 // TODO
 function applyOrderDiscount(total, discount) {
-  return total;
+  const { discountType, value } = discount;
+  const op = discountType === 'fixed' ? 'add' : 'mul';
+  return Decimal[op](total, value);
 }
 
 function applyOrderDiscounts(cart, total) {

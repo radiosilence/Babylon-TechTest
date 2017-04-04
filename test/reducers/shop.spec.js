@@ -48,4 +48,7 @@ describe('shop reducer', () => {
     const { quantity } = item;
     expect(quantity).to.equal(2);
   });
+
+  // Test that the price of portal gun has a fiver knocked off of it
+  // Test that the basked is halved if beer is involved
 });
