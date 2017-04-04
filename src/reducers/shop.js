@@ -1,16 +1,23 @@
 import I from 'immutable';
 import uuid from 'uuid';
+import Decimal from 'decimal.js';
 import { ActionTypes } from '../constants';
 
 import { products } from '../data';
 
+function updateTotal(state) {
+  // const { cart } = state;
+  return state;
+}
+
 function updateCart(state, fn) {
-  return state.update('cart', fn);
+  return updateTotal(state.update('cart', fn));
 }
 
 function createCartItem(id, quantity = 1) {
   return I.Map({
     cartId: uuid(),
+    total: new Decimal(0),
     id,
     quantity,
   });
