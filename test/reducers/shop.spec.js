@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import { expect } from 'chai';
 import { ActionTypes } from '../../src/constants';
 
@@ -50,5 +51,11 @@ describe('shop reducer', () => {
   });
 
   // Test that the price of portal gun has a fiver knocked off of it
+  it('should add an item to the cart and it should have a fiver off of it', () => {
+    const nextState = addedItem(initialState);
+    const item = nextState.getIn(['cart', 0]);
+    const { lineTotal } = item;
+    expect(lineTotal.eq(new Decimal(295))).to.equal(true);
+  });
   // Test that the basked is halved if beer is involved
 });
