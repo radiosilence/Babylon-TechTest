@@ -5,7 +5,7 @@
   "author": "James Cleveland",
   "license": "MIT",
   "scripts": {
-    "test": "mocha test/**/*.spec.js --ALLOW_CONFIG_MUTATIONS=true --NODE_ENV=test",
+    "test": "mocha test/**/*.spec.js -R spec --ALLOW_CONFIG_MUTATIONS=true --NODE_ENV=test",
     "lint": "eslint src"
   },
   "config": {
@@ -71,6 +71,7 @@
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.3",
     "react-router": "^4.0.0",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "uuid": "^3.0.1"
   }
 }
