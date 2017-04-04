@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 
+import Cart from './Cart';
+import Products from './Products';
 
 /**
  * Wrapper for everything.
@@ -17,6 +19,8 @@ class App extends Component {
             Header
           </Col>
         </Row>
+        <Cart />
+        <Products />
       </Grid>
     );
   }

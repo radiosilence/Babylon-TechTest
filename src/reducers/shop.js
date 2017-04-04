@@ -1,9 +1,15 @@
 import I from 'immutable';
-// import ActionTypes from '../constants/actionTypes';
+import { ActionTypes } from '../constants';
 
-const initialState = I.fromJS({});
+const initialState = I.fromJS({
+  cart: [],
+});
 
-const mutations = {};
+const mutations = {
+  [ActionTypes.ADD_ITEM]: (state) => state,
+  [ActionTypes.REMOVE_ITEM]: (state) => state,
+  [ActionTypes.UPDATE_ITEM_QUANTITY]: (state) => state,
+};
 
 
 /**
