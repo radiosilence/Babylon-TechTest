@@ -1,7 +1,10 @@
 import I from 'immutable';
 import { ActionTypes } from '../constants';
 
-const initialState = I.fromJS({
+import { products } from '../data';
+
+export const initialState = I.fromJS({
+  products,
   cart: [],
 });
 
