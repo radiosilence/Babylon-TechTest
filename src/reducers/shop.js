@@ -29,11 +29,11 @@ export const initialState = I.fromJS({
 const mutations = {
   [ActionTypes.Shop.ADD_ITEM]: (state, { id, quantity }) => updateCart(
     state,
-    cart => cart.push(createCartItem(id, quantity))
+    cart => cart.push(createCartItem(id, quantity)),
   ),
   [ActionTypes.Shop.REMOVE_ITEM]: (state, action) => updateCart(
     state,
-    cart => cart.filter(({ cartId }) => cartId !== action.cartId)
+    cart => cart.filter(({ cartId }) => cartId !== action.cartId),
   ),
   [ActionTypes.Shop.UPDATE_ITEM_QUANTITY]: (state) => state,
 };
