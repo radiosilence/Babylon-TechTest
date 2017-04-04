@@ -23,14 +23,28 @@ describe('shop reducer', () => {
   });
 
   it('should remove an item from the cart', () => {
-    const state = addedItem(initialState);
+    let state = addedItem(initialState);
     const item = state.getIn(['cart', 0]);
     const { cartId } = item;
-    const nextState = shopReducer(state, {
+    state = shopReducer(state, {
       type: ActionTypes.Shop.REMOVE_ITEM,
       cartId,
     });
-    const { cart } = nextState;
+    const { cart } = state;
     expect(cart.count()).to.equal(0);
+  });
+
+  it('should update the quantity of a cart item from 1 to 2', () => {
+    let state = addedItem(initialState);
+    let item = state.getIn(['cart', 0]);
+    const { cartId } = item;
+    state = shopReducer(state, {
+      type: ActionTypes.Shop.UPDATE_ITEM_QUANTITY,
+      cartId,
+      quantity: 2,
+    });
+    item = state.getIn(['cart', 0]);
+    const { quantity } = item;
+    expect(quantity).to.equal(2);
   });
 });

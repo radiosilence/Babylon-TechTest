@@ -35,7 +35,13 @@ const mutations = {
     state,
     cart => cart.filter(({ cartId }) => cartId !== action.cartId),
   ),
-  [ActionTypes.Shop.UPDATE_ITEM_QUANTITY]: (state) => state,
+  [ActionTypes.Shop.UPDATE_ITEM_QUANTITY]: (state, action) => updateCart(
+    state,
+    cart => cart.map((item) => item.get('cartId') === action.cartId
+      ? item.set('quantity', action.quantity)
+      : item,
+    ),
+  ),
 };
 
 
