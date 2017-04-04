@@ -6,6 +6,11 @@ import shopReducer, {
   initialState,
 } from '../../src/reducers/shop';
 
+const beer = {
+  type: ActionTypes.Shop.ADD_ITEM,
+  id: 'f886a422-0c24-4a19-ac89-fc5cb47f2043',
+};
+
 function addedItem(state) {
   return shopReducer(state, {
     type: ActionTypes.Shop.ADD_ITEM,
@@ -56,6 +61,14 @@ describe('shop reducer', () => {
     const item = nextState.getIn(['cart', 0]);
     const { lineTotal } = item;
     expect(lineTotal.eq(new Decimal(295))).to.equal(true);
+  });
+  // Test that the price of portal gun has a fiver knocked off of it
+  it('should add an item to the cart and it should have a fiver off of it and also the entire orer be halved because beer is involved', () => {
+    const state = shopReducer(addedItem(initialState), beer);
+    const desiredTotal = new Decimal(147.5);
+    console.log('total', state.get('total'));
+    console.log('desired', desiredTotal);
+    expect(state.get('total').eq(desiredTotal)).to.equal(true);
   });
   // Test that the basked is halved if beer is involved
 });
