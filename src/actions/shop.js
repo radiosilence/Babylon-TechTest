@@ -1,9 +1,10 @@
 import { ActionTypes } from '../constants';
 
-export function addItem(itemId) {
+export function addItem(id, quantity) {
   return {
     type: ActionTypes.Shop.ADD_ITEM,
-    itemId,
+    id,
+    quantity: parseInt(quantity, 10),
   };
 }
 
@@ -19,6 +20,6 @@ export function updateItemQuantity(cartId, quantity) {
   return {
     type: ActionTypes.Shop.UPDATE_ITEM_QUANTITY,
     cartId,
-    quantity,
+    quantity: parseInt(quantity, 10),
   };
 }

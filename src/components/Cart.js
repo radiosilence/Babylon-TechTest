@@ -8,6 +8,8 @@ import { bindActionCreators } from 'redux';
 
 import actions from '../actions';
 
+import CartRow from './CartRow';
+
 /**
  * Wrapper for everything.
  *
@@ -24,11 +26,36 @@ class Cart extends Component {
     return !I.is(this.props.shop, nextProps.shop);
   }
 
+  rowNode({ id, cartId, quantity }) {
+    const {
+      shop,
+      shopActionCreators: { removeItem, updateItemQuantity },
+    } = this.props;
+    return (
+      <CartRow
+        key={cartId}
+        onRemove={() => removeItem(cartId)}
+        onChangeQuantity={nextQuantity => updateItemQuantity(cartId, nextQuantity)}
+        quantity={quantity}>
+        {shop.getIn(['products', id, 'name'])}
+      </CartRow>
+    );
+  }
+
+  rowNodes() {
+    const { shop: { cart } } = this.props;
+    return cart
+      .map(row => this.rowNode(row));
+  }
+
   render() {
     return (
       <Row>
         <Col md={12}>
-          Cart
+          {this.rowNodes()}
+          <pre>
+            {JSON.stringify(this.props.shop.toJS(), null, 2)}
+          </pre>
         </Col>
       </Row>
     );
