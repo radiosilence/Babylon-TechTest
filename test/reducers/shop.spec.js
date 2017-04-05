@@ -71,4 +71,14 @@ describe('shop reducer', () => {
     const desiredTotal = new Decimal(150.1);
     expect(state.get('total').eq(desiredTotal)).to.equal(true);
   });
+
+  // Test that the price of portal gun has a fiver knocked off of it
+  it('should add an item TWICE to the cart and it should have a fiver off of it and also the entire orer be halved because beer is involved', () => {
+    let state = addedItem(addedItem(initialState));
+    state = shopReducer(state, beer);
+    console.log('state', state);
+
+    const desiredTotal = new Decimal(297.6);
+    expect(state.get('total').eq(desiredTotal)).to.equal(true);
+  });
 });
