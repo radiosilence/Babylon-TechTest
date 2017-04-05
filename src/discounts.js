@@ -1,6 +1,6 @@
 import I from 'immutable';
 import Decimal from 'decimal.js';
-import { discounts } from './data';
+import { products, discounts } from './data';
 
 function applyDiscount(lineItem, discount) {
   const { discountType, value } = discount;
@@ -31,7 +31,6 @@ function applyLineDiscounts(cart) {
     .map(applyLineDiscount);
 }
 
-// TODO
 function applicableToCart(cart, discount) {
   const inCartIds = cart.map(({ id }) => id);
 
@@ -43,7 +42,6 @@ function applicableToCart(cart, discount) {
     );
 }
 
-// TODO
 function applyOrderDiscount(total, discount) {
   const { discountType, value } = discount;
   const op = discountType === 'fixed' ? 'add' : 'mul';
@@ -60,8 +58,13 @@ function applyOrderDiscounts(cart, total) {
     );
 }
 
+export function baseLineTotals(cart) {
+  return cart
+    .map(item => item.set('lineTotal', products.getIn([item.get('id'), 'price'])));
+}
+
 export function applyDiscounts(cart) {
-  const nextCart = applyLineDiscounts(cart);
+  const nextCart = applyLineDiscounts(baseLineTotals(cart));
   const total = nextCart.reduce(
     (acc, { lineTotal }) => Decimal.add(lineTotal, acc),
     new Decimal(0),
