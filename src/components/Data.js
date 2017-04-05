@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 
 import actions from '../actions';
 
-import AddBasketButton from './AddBasketButton';
 
 /**
  * Wrapper for everything.
@@ -16,7 +15,7 @@ import AddBasketButton from './AddBasketButton';
  * @class App
  * @extends {Component}
  */
-class Products extends Component {
+class Data extends Component {
   static propTypes = {
     shop: PropTypes.instanceOf(I.Map),
     shopActionCreators: PropTypes.object,
@@ -25,32 +24,15 @@ class Products extends Component {
   shouldComponentUpdate(nextProps) {
     return !I.is(this.props.shop, nextProps.shop);
   }
-
-  handleOnAdd = (id, quantity) => {
-    const { shopActionCreators: { addItem } } = this.props;
-    addItem(id, quantity);
-  };
-
-  productNode({ id, name }) {
-    return (
-      <Col key={id} md={2}>
-        {name}
-        <AddBasketButton onAdd={quantity => this.handleOnAdd(id, quantity)}/>
-      </Col>
-    );
-  }
-
-  productNodes() {
-    const { shop: { products } } = this.props;
-    return products.toSeq()
-      .map(product => this.productNode(product));
-  }
-
   render() {
     return (
       <Row>
-        <Col md={12}><h2>Products</h2></Col>
-        {this.productNodes()}
+        <Col md={12}>
+          <h2>State</h2>
+          <pre>
+            {JSON.stringify(this.props.shop.toJS(), null, 2)}
+          </pre>
+        </Col>
       </Row>
     );
   }
@@ -65,4 +47,4 @@ const mapDispatchToProps = (dispatch) => ({
   shopActionCreators: bindActionCreators(actions.shop, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Products);
+export default connect(mapStateToProps, mapDispatchToProps)(Data);

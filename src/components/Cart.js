@@ -48,14 +48,21 @@ class Cart extends Component {
       .map(row => this.rowNode(row));
   }
 
+  total() {
+    const { shop: { total } } = this.props;
+    if (total === undefined) return '0.00';
+    return total.toString();
+  }
+
   render() {
     return (
       <Row>
         <Col md={12}>
+          <h2>
+            Cart
+          </h2>
           {this.rowNodes()}
-          <pre>
-            {JSON.stringify(this.props.shop.toJS(), null, 2)}
-          </pre>
+          <h3>Total: £{this.total()}</h3>
         </Col>
       </Row>
     );
