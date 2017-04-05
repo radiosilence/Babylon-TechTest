@@ -1,6 +1,5 @@
 import I from 'immutable';
 import Decimal from 'decimal.js';
-import { products, discounts } from './data';
 
 
 /**
@@ -30,7 +29,7 @@ function applyDiscount(lineItem, discount) {
  * @param {any} item
  * @returns
  */
-function applyLineDiscount(item) {
+function applyLineDiscount(item, discounts) {
   const { id } = item;
   return discounts
     .filter(({ type }) => type === 'product')
@@ -48,9 +47,9 @@ function applyLineDiscount(item) {
  * @param {any} cart
  * @returns
  */
-function applyLineDiscounts(cart) {
+function applyLineDiscounts(cart, discounts) {
   return cart
-    .map(applyLineDiscount);
+    .map(item => applyLineDiscount(item, discounts));
 }
 
 
@@ -71,7 +70,6 @@ function applicableToCart(cart, discount) {
       true,
     );
 }
-
 
 
 /**
@@ -95,7 +93,7 @@ function applyOrderDiscount(total, discount) {
  * @param {any} total
  * @returns
  */
-function applyOrderDiscounts(cart, total) {
+function applyOrderDiscounts(cart, discounts, total) {
   return discounts
     .filter(({ type }) => type === 'order')
     .filter(discount => applicableToCart(cart, discount))
@@ -113,7 +111,7 @@ function applyOrderDiscounts(cart, total) {
  * @param {any} cart
  * @returns
  */
-export function baseLineTotals(cart) {
+export function baseLineTotals(cart, products) {
   // console.log('doing baseLineTotals of cart', cart);
   return cart
     .map(item => item.set('lineTotal', products.getIn([item.get('id'), 'price']) * item.get('quantity')));
@@ -127,15 +125,15 @@ export function baseLineTotals(cart) {
  * @param {any} cart
  * @returns
  */
-export function applyDiscounts(cart) {
+export function applyDiscounts(cart, products, discounts) {
   // console.log('applyin discounts of cart', cart);
-  const nextCart = applyLineDiscounts(baseLineTotals(cart));
+  const nextCart = applyLineDiscounts(baseLineTotals(cart, products), discounts);
   const total = nextCart.reduce(
     (acc, { lineTotal }) => Decimal.add(lineTotal, acc),
     new Decimal(0),
   );
 
-  const nextTotal = applyOrderDiscounts(nextCart, total);
+  const nextTotal = applyOrderDiscounts(nextCart, discounts, total);
 
   return I.Map({
     cart: nextCart,

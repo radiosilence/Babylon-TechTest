@@ -3,7 +3,7 @@ import uuid from 'uuid';
 import { ActionTypes } from '../constants';
 import { applyDiscounts } from '../discounts';
 
-import { products } from '../data';
+import { products, discounts } from '../data';
 
 
 /**
@@ -14,7 +14,7 @@ import { products } from '../data';
  */
 function updateTotal(state) {
   const { cart } = state;
-  return state.merge(applyDiscounts(cart));
+  return state.merge(applyDiscounts(cart, products, discounts));
 }
 
 
