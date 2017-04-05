@@ -31,10 +31,10 @@ class Products extends Component {
     addItem(id, quantity);
   };
 
-  productNode({ id, name }) {
+  productNode({ id, name, price }) {
     return (
       <Col key={id} md={2}>
-        {name}
+        {name} (£{price.toString()})
         <AddBasketButton onAdd={quantity => this.handleOnAdd(id, quantity)}/>
       </Col>
     );
