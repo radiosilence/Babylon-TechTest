@@ -1,7 +1,8 @@
 Tech Test
 =========
 
-## Intro
+Intro
+-----
 
 Hi!
 
@@ -29,21 +30,26 @@ Also to note, floating point is useless for things involving money, so I've used
 `decimal.js` which provides (albeit slower) accurate calculations because for
 shops money is involved.
 
-## Discounts
+Discounts
+---------
 
   * Portal guns have £5 off
   * Curse removing stones are 50% off
   * If there is some beer in the order, the whole order is 50% off
 
 
-## Things I would have likely done given more time:
+Things I would have likely done given more time:
+------------------------------------------------
 
  * More tests of the `discount.js` file, as that applies reductions and
    transformations in order to update the state based on the discount rules.
+ * More tests of various helper functions.
  * Perhaps demonstrate how the discounts and products could be loaded off of
    a backend as opposed to stored as data.
  * Make it look not as ugly.
 
+Usage
+-----
 
 How to make it work:
 
