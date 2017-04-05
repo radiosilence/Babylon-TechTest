@@ -2,6 +2,14 @@ import I from 'immutable';
 import Decimal from 'decimal.js';
 import { products, discounts } from './data';
 
+
+/**
+ * Apply a discount to a line, based on the type of discount
+ *
+ * @param {any} lineItem
+ * @param {any} discount
+ * @returns
+ */
 function applyDiscount(lineItem, discount) {
   const { discountType, value } = discount;
   const { lineTotal, quantity } = lineItem;
@@ -16,6 +24,12 @@ function applyDiscount(lineItem, discount) {
 }
 
 
+/**
+ * Return a line item with it's discount applied
+ *
+ * @param {any} item
+ * @returns
+ */
 function applyLineDiscount(item) {
   const { id } = item;
   return discounts
@@ -27,11 +41,26 @@ function applyLineDiscount(item) {
     );
 }
 
+
+/**
+ * Apply all the product discounts to a line row
+ *
+ * @param {any} cart
+ * @returns
+ */
 function applyLineDiscounts(cart) {
   return cart
     .map(applyLineDiscount);
 }
 
+
+/**
+ * Find whether an order discount applies to the cart
+ *
+ * @param {any} cart
+ * @param {any} discount
+ * @returns
+ */
 function applicableToCart(cart, discount) {
   const inCartIds = cart.map(({ id }) => id);
 
@@ -43,12 +72,29 @@ function applicableToCart(cart, discount) {
     );
 }
 
+
+
+/**
+ * Apply a single cart total order discount
+ *
+ * @param {any} total
+ * @param {any} discount
+ * @returns
+ */
 function applyOrderDiscount(total, discount) {
   const { discountType, value } = discount;
   const op = discountType === 'fixed' ? 'add' : 'mul';
   return Decimal[op](total, value);
 }
 
+
+/**
+ * Apply discounts to cart total based on discounts that apply to that
+ *
+ * @param {any} cart
+ * @param {any} total
+ * @returns
+ */
 function applyOrderDiscounts(cart, total) {
   return discounts
     .filter(({ type }) => type === 'order')
@@ -59,12 +105,28 @@ function applyOrderDiscounts(cart, total) {
     );
 }
 
+
+/**
+ * Get the totals based on quantity and base item price, pre-discount
+ *
+ * @export
+ * @param {any} cart
+ * @returns
+ */
 export function baseLineTotals(cart) {
   // console.log('doing baseLineTotals of cart', cart);
   return cart
     .map(item => item.set('lineTotal', products.getIn([item.get('id'), 'price']) * item.get('quantity')));
 }
 
+
+/**
+ * Main function for processing cart and applying discounts
+ *
+ * @export
+ * @param {any} cart
+ * @returns
+ */
 export function applyDiscounts(cart) {
   // console.log('applyin discounts of cart', cart);
   const nextCart = applyLineDiscounts(baseLineTotals(cart));

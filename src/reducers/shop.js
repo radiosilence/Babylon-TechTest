@@ -5,15 +5,39 @@ import { applyDiscounts } from '../discounts';
 
 import { products } from '../data';
 
+
+/**
+ * Return state with update total based on discounts
+ *
+ * @param {any} state
+ * @returns
+ */
 function updateTotal(state) {
   const { cart } = state;
   return state.merge(applyDiscounts(cart));
 }
 
+
+/**
+ * Update the cart based on arbitrary function, automatically updating discounts
+ *
+ * @param {any} state
+ * @param {any} fn
+ * @returns
+ */
 function updateCart(state, fn) {
   return updateTotal(state.update('cart', fn));
 }
 
+
+/**
+ * Update an item in the cart with new quantity, but possibly removing
+ *
+ * @param {any} cart
+ * @param {any} cartId
+ * @param {any} quantity
+ * @returns
+ */
 function updateCartItem(cart, cartId, quantity) {
   if (quantity <= 0) {
     return cart.filter(({ cartId: cId }) => cId !== cartId);
@@ -25,6 +49,14 @@ function updateCartItem(cart, cartId, quantity) {
     : item);
 }
 
+
+/**
+ * Return a new cart item
+ *
+ * @param {any} id
+ * @param {number} [quantity=1]
+ * @returns
+ */
 function createCartItem(id, quantity = 1) {
   return I.Map({
     cartId: uuid(),
@@ -33,7 +65,16 @@ function createCartItem(id, quantity = 1) {
   });
 }
 
-function addOrCreateCartItem(cart, id, quantity) {
+
+/**
+ * Add if not exists for this product, or update existing item
+ *
+ * @param {any} cart
+ * @param {any} id
+ * @param {any} quantity
+ * @returns
+ */
+function addOrUpdateCartItem(cart, id, quantity) {
   const existingItems = cart.filter(({ id: itemId }) => id === itemId);
   if (existingItems.count() > 0) {
     const existingItem = existingItems.first();
@@ -52,7 +93,7 @@ export const initialState = I.fromJS({
 const mutations = {
   [ActionTypes.Shop.ADD_ITEM]: (state, { id, quantity }) => updateCart(
     state,
-    cart => addOrCreateCartItem(cart, id, quantity || 1),
+    cart => addOrUpdateCartItem(cart, id, quantity || 1),
   ),
   [ActionTypes.Shop.REMOVE_ITEM]: (state, action) => updateCart(
     state,
