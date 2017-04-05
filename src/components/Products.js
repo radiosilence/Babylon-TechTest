@@ -43,7 +43,8 @@ class Products extends Component {
   productNodes() {
     const { shop: { products } } = this.props;
     return products.toSeq()
-      .map(product => this.productNode(product));
+      .map(product => this.productNode(product))
+      .toArray();
   }
 
   render() {

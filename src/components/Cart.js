@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import I from 'immutable';
 
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Table } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -45,7 +45,8 @@ class Cart extends Component {
   rowNodes() {
     const { shop: { cart } } = this.props;
     return cart
-      .map(row => this.rowNode(row));
+      .map(row => this.rowNode(row))
+      .toArray();
   }
 
   total() {
@@ -61,7 +62,18 @@ class Cart extends Component {
           <h2>
             Cart
           </h2>
-          {this.rowNodes()}
+          <Table striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.rowNodes()}
+            </tbody>
+          </Table>
           <h3>Total: £{this.total()}</h3>
         </Col>
       </Row>

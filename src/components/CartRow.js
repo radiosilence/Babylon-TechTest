@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, Row, Col, FormControl } from 'react-bootstrap';
+import { Button, FormControl } from 'react-bootstrap';
 
 export default ({ children, quantity, onRemove, onChangeQuantity }) =>
-  <Row>
-    <Col md={8}>
+  <tr>
+    <td>
       {children}
-    </Col>
-    <Col md={2}>
+    </td>
+    <td>
       <FormControl
         value={quantity}
         type="number"
@@ -14,9 +14,9 @@ export default ({ children, quantity, onRemove, onChangeQuantity }) =>
           e.preventDefault();
           onChangeQuantity(e.target.value);
         }} />
-    </Col>
-    <Col md={2}>
+    </td>
+    <td>
       <Button onClick={onRemove}>Remove</Button>
-    </Col>
-  </Row>;
+    </td>
+  </tr>;
 
