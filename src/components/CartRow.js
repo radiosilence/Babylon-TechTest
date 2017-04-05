@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, FormControl } from 'react-bootstrap';
+import { Button, Row, Col, FormControl } from 'react-bootstrap';
 
 export default ({ children, quantity, onRemove, onChangeQuantity }) =>
   <Row>
@@ -16,7 +16,7 @@ export default ({ children, quantity, onRemove, onChangeQuantity }) =>
         }} />
     </Col>
     <Col md={2}>
-      <a href="" onClick={onRemove} />
+      <Button onClick={onRemove}>Remove</Button>
     </Col>
   </Row>;
 

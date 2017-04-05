@@ -15,6 +15,9 @@ function updateCart(state, fn) {
 }
 
 function updateCartItem(cart, cartId, quantity) {
+  if (quantity <= 0) {
+    return cart.filter(({ cartId: cId }) => cId !== cartId);
+  }
   return cart.map((item) => item.get('cartId') === cartId
     ? item.merge({
       quantity,
