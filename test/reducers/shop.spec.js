@@ -20,12 +20,24 @@ function addedItem(state) {
 
 describe('shop reducer', () => {
   it('should add an item to the cart', () => {
-    const nextState = addedItem(initialState);
-    const item = nextState.getIn(['cart', 0]);
+    const state = addedItem(initialState);
+    const item = state.getIn(['cart', 0]);
     const { id, quantity, cartId } = item;
+    const { cart } = state;
     expect(id).to.equal('5be7d36a-4f85-489c-82fb-5ceb99d57ecb');
     expect(quantity).to.equal(1);
     expect(cartId).to.not.equal(undefined);
+    expect(cart.count()).to.equal(1);
+  });
+
+  it('should add an item to the cart twice and have it increment as opposed to adding a new cart item', () => {
+    const state = addedItem(addedItem(initialState));
+    const item = state.getIn(['cart', 0]);
+    const { id, quantity } = item;
+    const { cart } = state;
+    expect(id).to.equal('5be7d36a-4f85-489c-82fb-5ceb99d57ecb');
+    expect(quantity).to.equal(2);
+    expect(cart.count()).to.equal(1);
   });
 
   it('should remove an item from the cart', () => {
@@ -49,7 +61,6 @@ describe('shop reducer', () => {
       cartId,
       quantity: 2,
     });
-    // console.log(state);
     item = state.getIn(['cart', 0]);
     const { quantity } = item;
     expect(quantity).to.equal(2);
@@ -76,8 +87,6 @@ describe('shop reducer', () => {
   it('should add an item TWICE to the cart and it should have a fiver off of it and also the entire orer be halved because beer is involved', () => {
     let state = addedItem(addedItem(initialState));
     state = shopReducer(state, beer);
-    console.log('state', state);
-
     const desiredTotal = new Decimal(297.6);
     expect(state.get('total').eq(desiredTotal)).to.equal(true);
   });

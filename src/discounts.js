@@ -4,13 +4,14 @@ import { products, discounts } from './data';
 
 function applyDiscount(lineItem, discount) {
   const { discountType, value } = discount;
-  const { lineTotal } = lineItem;
+  const { lineTotal, quantity } = lineItem;
 
   const op = discountType === 'fixed' ? 'add' : 'mul';
+  const multiplier = discountType === 'fixed' ? quantity : 1; // Shortcut/hack, tbh.
 
   return lineItem.set(
     'lineTotal',
-    Decimal[op](lineTotal, value),
+    Decimal[op](lineTotal, value * multiplier),
   );
 }
 
@@ -59,11 +60,13 @@ function applyOrderDiscounts(cart, total) {
 }
 
 export function baseLineTotals(cart) {
+  // console.log('doing baseLineTotals of cart', cart);
   return cart
-    .map(item => item.set('lineTotal', products.getIn([item.get('id'), 'price'])));
+    .map(item => item.set('lineTotal', products.getIn([item.get('id'), 'price']) * item.get('quantity')));
 }
 
 export function applyDiscounts(cart) {
+  // console.log('applyin discounts of cart', cart);
   const nextCart = applyLineDiscounts(baseLineTotals(cart));
   const total = nextCart.reduce(
     (acc, { lineTotal }) => Decimal.add(lineTotal, acc),

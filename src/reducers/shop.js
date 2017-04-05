@@ -14,13 +14,30 @@ function updateCart(state, fn) {
   return updateTotal(state.update('cart', fn));
 }
 
+function updateCartItem(cart, cartId, quantity) {
+  return cart.map((item) => item.get('cartId') === cartId
+    ? item.merge({
+      quantity,
+    })
+    : item);
+}
+
 function createCartItem(id, quantity = 1) {
   return I.Map({
     cartId: uuid(),
-    lineTotal: products.getIn([id, 'price']),
     id,
     quantity,
   });
+}
+
+function addOrCreateCartItem(cart, id, quantity) {
+  const existingItems = cart.filter(({ id: itemId }) => id === itemId);
+  if (existingItems.count() > 0) {
+    const existingItem = existingItems.first();
+    const { cartId, quantity: existingQuantity } = existingItem;
+    return updateCartItem(cart, cartId, quantity + existingQuantity);
+  }
+  return cart.push(createCartItem(id, quantity));
 }
 
 export const initialState = I.fromJS({
@@ -32,18 +49,15 @@ export const initialState = I.fromJS({
 const mutations = {
   [ActionTypes.Shop.ADD_ITEM]: (state, { id, quantity }) => updateCart(
     state,
-    cart => cart.push(createCartItem(id, quantity)),
+    cart => addOrCreateCartItem(cart, id, quantity || 1),
   ),
   [ActionTypes.Shop.REMOVE_ITEM]: (state, action) => updateCart(
     state,
     cart => cart.filter(({ cartId }) => cartId !== action.cartId),
   ),
-  [ActionTypes.Shop.UPDATE_ITEM_QUANTITY]: (state, action) => updateCart(
+  [ActionTypes.Shop.UPDATE_ITEM_QUANTITY]: (state, { cartId, quantity }) => updateCart(
     state,
-    cart => cart.map((item) => item.get('cartId') === action.cartId
-      ? item.set('quantity', action.quantity)
-      : item,
-    ),
+    cart => updateCartItem(cart, cartId, quantity),
   ),
 };
 
